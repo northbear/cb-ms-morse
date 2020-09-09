@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 func main() {
 	fmt.Println("Hello, World from Receiver!")
+	resp, err := http.Get("http://localhost:5000/")
 }
