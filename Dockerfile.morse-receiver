@@ -1,0 +1,11 @@
+FROM golang:1.15-alpine as buildimage
+
+COPY morse-receiver /go/src/morse-receiver
+RUN  cd /go/src/morse-receiver; go build
+RUN  ls -l /go/src/morse-receiver
+
+FROM alpine:3.12
+ENV SERVICE_ADDRESS=172.17.0.1:5000
+COPY --from=buildimage /go/src/morse-receiver/morse-receiver .
+
+ENTRYPOINT ["./morse-receiver"]
