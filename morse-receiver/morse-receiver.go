@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
+	"time"
 )
 
 const (
@@ -17,18 +19,20 @@ func main() {
 	servaddr := os.Getenv("SERVICE_ADDRESS")
 	_, _, err := net.SplitHostPort(servaddr)
 	if err != nil {
-		fmt.Println("Error: wrong value of SERVICE_ADDRESS envvar")
+		log.Println("Error: wrong value of SERVICE_ADDRESS envvar")
 	}
 	url := fmt.Sprintf("http://%s/", servaddr)
-	fmt.Println(url)
+	log.Println(url)
+
+	http.DefaultClient.Timeout = 5 * time.Second
 
 	for i := 0; i < NUM_TRYS; i++ {
 		resp, err := http.Get(url)
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
-		fmt.Printf("received: %s\n", body)
+		log.Printf("received: %s", body)
 	}
 }
