@@ -9,3 +9,4 @@ ENV SERVICE_ADDRESS=172.17.0.1:5000
 COPY --from=buildimage /go/src/morse-receiver/morse-receiver .
 
 ENTRYPOINT ["./morse-receiver"]
+CMD ['&>>', 'output/morse-receiver.log']
